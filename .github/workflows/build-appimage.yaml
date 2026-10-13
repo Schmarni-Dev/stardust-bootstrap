@@ -52,11 +52,11 @@ jobs:
           wget https://github.com/AppImage/appimagetool/releases/download/continuous/appimagetool-${{ matrix.arch }}.AppImage -O appimagetool
           chmod +x appimagetool
       - name: Build AppDir
-        run: just server_cargo_flags="${{matrix.server_flags}}" telescope_appdir="Telescope-${{ matrix.arch }}-${{ matrix.bin_suffix }}.AppDir" appdir-telescope
+        run: just server_cargo_flags="${{matrix.server_flags}}" telescope_appdir="Telescope-${{ matrix.arch }}${{ matrix.bin_suffix }}.AppDir" appdir-telescope
 
       - name: Build AppImage
         run: |
-          ./appimagetool "Telescope-${{ matrix.arch }}-${{ matrix.bin_suffix }}.AppDir" Telescope-${{ matrix.arch }}-${{ matrix.bin_suffix }}.AppImage
+          ./appimagetool "Telescope-${{ matrix.arch }}${{ matrix.bin_suffix }}.AppDir" Telescope-${{ matrix.arch }}${{ matrix.bin_suffix }}.AppImage
 
       # - name: Package AppDir
       #   run: tar -czvf Telescope-${{ matrix.arch }}-${{ matrix.bin_suffix }}.tar.gz Telescope.AppDir
@@ -64,14 +64,14 @@ jobs:
       - name: Upload AppDir
         uses: actions/upload-artifact@v4
         with:
-          name: Telescope-${{ matrix.arch }}-${{ matrix.bin_suffix }}.AppDir
-          path: Telescope-${{ matrix.arch }}-${{ matrix.bin_suffix }}.AppDir
+          name: Telescope-${{ matrix.arch }}${{ matrix.bin_suffix }}.AppDir
+          path: Telescope-${{ matrix.arch }}${{ matrix.bin_suffix }}.AppDir
 
       - name: Upload AppImage
         uses: actions/upload-artifact@v4
         with:
-          name: Telescope-${{ matrix.arch }}-${{ matrix.bin_suffix }}.AppImage
-          path: Telescope-${{ matrix.arch }}-${{ matrix.bin_suffix }}.AppImage
+          name: Telescope-${{ matrix.arch }}${{ matrix.bin_suffix }}.AppImage
+          path: Telescope-${{ matrix.arch }}${{ matrix.bin_suffix }}.AppImage
 
       - name: Upload AppImage to GitHub Release
         if: github.event_name == 'release'

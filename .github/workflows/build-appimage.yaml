@@ -12,6 +12,8 @@ env:
   CARGO_TERM_COLOR: always
   SCCACHE_GHA_ENABLED: "true"
   RUSTC_WRAPPER: "sccache"
+  CARGO_INCREMENTAL: "0"
+  CARGO_TARGET_DIR: "/tmp/cargo_target"
 jobs:
   build:
     strategy:

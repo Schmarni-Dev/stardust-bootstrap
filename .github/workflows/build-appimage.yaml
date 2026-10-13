@@ -47,7 +47,7 @@ jobs:
 
       - name: Download appimagetool
         run: |
-          wget https://github.com/AppImage/appimagetool/releases/download/continuous/appimagetool-x86_64.AppImage -O appimagetool
+          wget https://github.com/AppImage/appimagetool/releases/download/continuous/appimagetool-${{ matrix.arch }}.AppImage -O appimagetool
           chmod +x appimagetool
       - name: Build AppDir
         run: just server_cargo_flags="${{matrix.server_flags}}" telescope_appdir="Telescope-${{ matrix.arch }}-${{ matrix.bin_suffix }}.AppDir" appdir-telescope

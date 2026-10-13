@@ -1,0 +1,86 @@
+name: Build AppImage
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  release:
+    types: [created]
+
+env:
+  APPDIR: StardustXR-Telescope.AppDir
+  CARGO_TERM_COLOR: always
+  SCCACHE_GHA_ENABLED: "true"
+  RUSTC_WRAPPER: "sccache"
+jobs:
+  build:
+    strategy:
+      matrix:
+        openxr_build: [static, dynamic]
+        arch: [x86_64, aarch64]
+        include:
+          - arch: x86_64
+            runner: ubuntu-24.04
+          - arch: aarch64
+            runner: ubuntu-24.04-arm
+          - openxr_build: static
+            server_flags: "-F bevy_mod_openxr/openxr_static"
+            bin_suffix: "-static_openxr"
+          - openxr_build: dynamic
+            server_flags: ""
+            bin_suffix: ""
+          
+    runs-on: ${{matrix.runner}}
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup sccache
+        uses: mozilla-actions/sccache-action@v0.0.11
+
+      - name: Install Stardust/Rust/Build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y g++ pkg-config libfontconfig1-dev libvulkan1 libxkbcommon-dev xwayland libwayland-dev libx11-dev libasound2-dev libxkbcommon-x11-0 libopenxr-dev libxkbcommon-x11-dev libxcb-cursor-dev desktop-file-utils just
+
+      - name: Set up Rust (gnu)
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          profile: minimal
+          target: x86_64-unknown-linux-gnu
+
+      - name: Download appimagetool
+        run: |
+          wget https://github.com/AppImage/appimagetool/releases/download/continuous/appimagetool-x86_64.AppImage -O appimagetool
+          chmod +x appimagetool
+      - name: Build AppDir
+        run: just server_cargo_flags=${{matrix.server_flags}} telescope_appdir="Telescope-${{ matrix.arch }}-${{ matrix.bin_suffix }}.AppDir" appdir-telescope
+
+      - name: Build AppImage
+        run: |
+          ./appimagetool "Telescope-${{ matrix.arch }}-${{ matrix.bin_suffix }}.AppDir" Telescope-${{ matrix.arch }}-${{ matrix.bin_suffix }}.AppImage
+
+      # - name: Package AppDir
+      #   run: tar -czvf Telescope-${{ matrix.arch }}-${{ matrix.bin_suffix }}.tar.gz Telescope.AppDir
+
+      - name: Upload AppDir
+        uses: actions/upload-artifact@v4
+        with:
+          name: Telescope-${{ matrix.arch }}-${{ matrix.bin_suffix }}.AppDir
+          path: Telescope-${{ matrix.arch }}-${{ matrix.bin_suffix }}.AppDir
+
+      - name: Upload AppImage
+        uses: actions/upload-artifact@v4
+        with:
+          name: Telescope-${{ matrix.arch }}-${{ matrix.bin_suffix }}.AppImage
+          path: Telescope-${{ matrix.arch }}-${{ matrix.bin_suffix }}.AppImage
+
+      - name: Upload AppImage to GitHub Release
+        if: github.event_name == 'release'
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            Telescope-${{ matrix.arch }}-${{ matrix.bin_suffix }}.AppImage
+

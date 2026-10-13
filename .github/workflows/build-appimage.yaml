@@ -43,7 +43,7 @@ jobs:
       - name: Install Stardust/Rust/Build dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y g++ pkg-config libfontconfig1-dev libvulkan1 libxkbcommon-dev xwayland libwayland-dev libx11-dev libasound2-dev libxkbcommon-x11-0 libopenxr-dev libxkbcommon-x11-dev libxcb-cursor-dev desktop-file-utils just
+          sudo apt-get install -y g++ pkg-config libfontconfig1-dev libvulkan1 libxkbcommon-dev xwayland libwayland-dev libx11-dev libasound2-dev libxkbcommon-x11-0 libopenxr-dev libxkbcommon-x11-dev libxcb-cursor-dev desktop-file-utils just libudev-dev
 
       - name: Download appimagetool
         run: |

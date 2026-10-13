@@ -12,8 +12,8 @@ build:
     {{ just }} org.stardustxr.Comet/build-release
     {{ just }} org.stardustxr.Flatland/build-release
     {{ just }} org.stardustxr.Gravity/build-release
-    # {{ just }} org.stardustxr.NonSpatialInput/build-release
-    # {{ just }} org.stardustxr.Protostar/build-release
+    {{ just }} org.stardustxr.NonSpatialInput/build-release
+    {{ just }} org.stardustxr.Protostar/build-release
     {{ just }} org.stardustxr.SolarSailer/build-release
     {{ just }} org.stardustxr.Server/build-release {{ server_cargo_flags }}
     {{ just }} org.stardustxr.WaylandService/build-release
@@ -26,8 +26,8 @@ install: build
     {{ just }} rootdir="{{ rootdir }}" prefix="{{ prefix }}" org.stardustxr.Comet/install
     {{ just }} rootdir="{{ rootdir }}" prefix="{{ prefix }}" org.stardustxr.Flatland/install
     {{ just }} rootdir="{{ rootdir }}" prefix="{{ prefix }}" org.stardustxr.Gravity/install
-    # {{ just }} rootdir="{{ rootdir }}" prefix="{{ prefix }}" org.stardustxr.NonSpatialInput/install
-    # {{ just }} rootdir="{{ rootdir }}" prefix="{{ prefix }}" org.stardustxr.Protostar/install
+    {{ just }} rootdir="{{ rootdir }}" prefix="{{ prefix }}" org.stardustxr.NonSpatialInput/install
+    {{ just }} rootdir="{{ rootdir }}" prefix="{{ prefix }}" org.stardustxr.Protostar/install
     {{ just }} rootdir="{{ rootdir }}" prefix="{{ prefix }}" org.stardustxr.SolarSailer/install
     {{ just }} rootdir="{{ rootdir }}" prefix="{{ prefix }}" org.stardustxr.Server/install
     {{ just }} rootdir="{{ rootdir }}" prefix="{{ prefix }}" org.stardustxr.WaylandService/install

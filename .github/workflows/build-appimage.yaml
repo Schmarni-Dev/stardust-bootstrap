@@ -45,13 +45,6 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y g++ pkg-config libfontconfig1-dev libvulkan1 libxkbcommon-dev xwayland libwayland-dev libx11-dev libasound2-dev libxkbcommon-x11-0 libopenxr-dev libxkbcommon-x11-dev libxcb-cursor-dev desktop-file-utils just
 
-      - name: Set up Rust (gnu)
-        uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
-          profile: minimal
-          target: x86_64-unknown-linux-gnu
-
       - name: Download appimagetool
         run: |
           wget https://github.com/AppImage/appimagetool/releases/download/continuous/appimagetool-x86_64.AppImage -O appimagetool

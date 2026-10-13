@@ -78,11 +78,14 @@ install_read_only_deps: build_read_only_deps
 _build_vendored_readonly target *args:
     #!/usr/bin/env sh
     cd {{ target }}
+    {{ if path_exists(target) == "true" { 'chmod -R +w vendor' } else { '' } }}    
     {{ just }} vendor
-    rm -rf vendor
+    {{ if path_exists(target) == "true" { 'chmod -R +w vendor' } else { '' } }}    
+    {{ if path_exists(target) == "true" { 'rm -rf vendor' } else { '' } }}    
     tar pxf vendor.tar
-    chmod -R a-w vendor
+    chmod -R -w vendor
     {{ just }} build-release '--frozen --offline' {{ args }}
+    chmod -R +w vendor
 
 appdir-telescope: build_read_only_deps
     mkdir -p "{{ telescope_appdir }}"

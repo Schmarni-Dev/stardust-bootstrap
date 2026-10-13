@@ -19,7 +19,13 @@ build:
     {{ just }} org.stardustxr.WaylandService/build-release
     {{ just }} org.stardustxr.PalmLauncher/build-release
 
+install_read_only_deps: build_read_only_deps
+	{{ just }} rootdir="{{ rootdir }}" prefix="{{ prefix }}" _install_inner
+
 install: build
+	{{ just }} rootdir="{{ rootdir }}" prefix="{{ prefix }}" _install_inner
+
+_install_inner:
     {{ just }} rootdir="{{ rootdir }}" prefix="{{ prefix }}" org.stardustxr.Atmosphere/install
     {{ just }} rootdir="{{ rootdir }}" prefix="{{ prefix }}" org.stardustxr.Armillary/install
     {{ just }} rootdir="{{ rootdir }}" prefix="{{ prefix }}" org.stardustxr.BlackHole/install
@@ -60,20 +66,6 @@ build_read_only_deps:
     {{ just }} _build_vendored_readonly org.stardustxr.Server {{ server_cargo_flags }}
     {{ just }} _build_vendored_readonly org.stardustxr.WaylandService
     {{ just }} _build_vendored_readonly org.stardustxr.PalmLauncher
-
-install_read_only_deps: build_read_only_deps
-    {{ just }} rootdir="{{ rootdir }}" prefix="{{ prefix }}" org.stardustxr.Atmosphere/install
-    {{ just }} rootdir="{{ rootdir }}" prefix="{{ prefix }}" org.stardustxr.Armillary/install
-    {{ just }} rootdir="{{ rootdir }}" prefix="{{ prefix }}" org.stardustxr.BlackHole/install
-    {{ just }} rootdir="{{ rootdir }}" prefix="{{ prefix }}" org.stardustxr.Comet/install
-    {{ just }} rootdir="{{ rootdir }}" prefix="{{ prefix }}" org.stardustxr.Flatland/install
-    {{ just }} rootdir="{{ rootdir }}" prefix="{{ prefix }}" org.stardustxr.Gravity/install
-    {{ just }} rootdir="{{ rootdir }}" prefix="{{ prefix }}" org.stardustxr.NonSpatialInput/install
-    {{ just }} rootdir="{{ rootdir }}" prefix="{{ prefix }}" org.stardustxr.Protostar/install
-    {{ just }} rootdir="{{ rootdir }}" prefix="{{ prefix }}" org.stardustxr.SolarSailer/install
-    {{ just }} rootdir="{{ rootdir }}" prefix="{{ prefix }}" org.stardustxr.Server/install
-    {{ just }} rootdir="{{ rootdir }}" prefix="{{ prefix }}" org.stardustxr.WaylandService/install
-    {{ just }} rootdir="{{ rootdir }}" prefix="{{ prefix }}" org.stardustxr.PalmLauncher/install
 
 _build_vendored_readonly target *args:
     #!/usr/bin/env sh

@@ -19,7 +19,13 @@ build:
     {{ just }} org.stardustxr.WaylandService/build-release
     {{ just }} org.stardustxr.PalmLauncher/build-release
 
+install_read_only_deps: build_read_only_deps
+	{{ just }} rootdir="{{ rootdir }}" prefix="{{ prefix }}" _install_inner
+
 install: build
+	{{ just }} rootdir="{{ rootdir }}" prefix="{{ prefix }}" _install_inner
+
+_install_inner:
     {{ just }} rootdir="{{ rootdir }}" prefix="{{ prefix }}" org.stardustxr.Atmosphere/install
     {{ just }} rootdir="{{ rootdir }}" prefix="{{ prefix }}" org.stardustxr.Armillary/install
     {{ just }} rootdir="{{ rootdir }}" prefix="{{ prefix }}" org.stardustxr.BlackHole/install
@@ -47,11 +53,37 @@ uninstall:
     {{ just }} rootdir="{{ rootdir }}" prefix="{{ prefix }}" org.stardustxr.WaylandService/uninstall
     {{ just }} rootdir="{{ rootdir }}" prefix="{{ prefix }}" org.stardustxr.PalmLauncher/uninstall
 
-appdir-telescope: build
+build_read_only_deps:
+    {{ just }} _build_vendored_readonly org.stardustxr.Armillary
+    {{ just }} _build_vendored_readonly org.stardustxr.Atmosphere
+    {{ just }} _build_vendored_readonly org.stardustxr.BlackHole
+    {{ just }} _build_vendored_readonly org.stardustxr.Comet
+    {{ just }} _build_vendored_readonly org.stardustxr.Flatland
+    {{ just }} _build_vendored_readonly org.stardustxr.Gravity
+    {{ just }} _build_vendored_readonly org.stardustxr.NonSpatialInput
+    {{ just }} _build_vendored_readonly org.stardustxr.Protostar
+    {{ just }} _build_vendored_readonly org.stardustxr.SolarSailer
+    {{ just }} _build_vendored_readonly org.stardustxr.Server {{ server_cargo_flags }}
+    {{ just }} _build_vendored_readonly org.stardustxr.WaylandService
+    {{ just }} _build_vendored_readonly org.stardustxr.PalmLauncher
+
+_build_vendored_readonly target *args:
+    #!/usr/bin/env sh
+    cd {{ target }}
+    {{ if path_exists(target) == "true" { 'chmod -R +w vendor' } else { '' } }}    
+    {{ just }} vendor
+    {{ if path_exists(target) == "true" { 'chmod -R +w vendor' } else { '' } }}    
+    {{ if path_exists(target) == "true" { 'rm -rf vendor' } else { '' } }}    
+    tar pxf vendor.tar
+    chmod -R -w vendor
+    {{ just }} build-release '--frozen --offline' {{ args }}
+    chmod -R +w vendor
+
+appdir-telescope: build_read_only_deps
     mkdir -p "{{ telescope_appdir }}"
 
     # Install all the stardust components
-    {{ just }} rootdir="{{ telescope_appdir }}" prefix="/usr" install
+    {{ just }} rootdir="{{ telescope_appdir }}" prefix="/usr" install_read_only_deps
 
     # xwayland-satellite
     if ! test -f "{{ telescope_appdir }}/usr/bin/xwayland-satellite"; then \

@@ -1,5 +1,6 @@
 just := just_executable()
 rootdir := ''
+server_cargo_flags := ''
 prefix := '/usr'
 telescope_appdir := justfile_directory() / "Telescope.AppDir"
 prefix_dir := justfile_directory() / 'prefix' / 'usr'
@@ -14,7 +15,7 @@ build:
     {{ just }} org.stardustxr.NonSpatialInput/build-release
     {{ just }} org.stardustxr.Protostar/build-release
     {{ just }} org.stardustxr.SolarSailer/build-release
-    {{ just }} org.stardustxr.Server/build-release
+    {{ just }} org.stardustxr.Server/build-release $server_cargo_flags
     {{ just }} org.stardustxr.WaylandService/build-release
     {{ just }} org.stardustxr.PalmLauncher/build-release
 

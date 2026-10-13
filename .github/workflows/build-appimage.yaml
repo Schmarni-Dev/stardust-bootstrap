@@ -9,7 +9,6 @@ on:
     types: [created]
 
 env:
-  APPDIR: StardustXR-Telescope.AppDir
   CARGO_TERM_COLOR: always
   SCCACHE_GHA_ENABLED: "true"
   RUSTC_WRAPPER: "sccache"
@@ -56,7 +55,7 @@ jobs:
           wget https://github.com/AppImage/appimagetool/releases/download/continuous/appimagetool-x86_64.AppImage -O appimagetool
           chmod +x appimagetool
       - name: Build AppDir
-        run: just server_cargo_flags=${{matrix.server_flags}} telescope_appdir="Telescope-${{ matrix.arch }}-${{ matrix.bin_suffix }}.AppDir" appdir-telescope
+        run: just server_cargo_flags="${{matrix.server_flags}}" telescope_appdir="Telescope-${{ matrix.arch }}-${{ matrix.bin_suffix }}.AppDir" appdir-telescope
 
       - name: Build AppImage
         run: |

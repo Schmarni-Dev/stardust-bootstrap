@@ -47,11 +47,48 @@ uninstall:
     {{ just }} rootdir="{{ rootdir }}" prefix="{{ prefix }}" org.stardustxr.WaylandService/uninstall
     {{ just }} rootdir="{{ rootdir }}" prefix="{{ prefix }}" org.stardustxr.PalmLauncher/uninstall
 
-appdir-telescope: build
+build_read_only_deps:
+    {{ just }} _build_vendored_readonly org.stardustxr.Armillary
+    {{ just }} _build_vendored_readonly org.stardustxr.Atmosphere
+    {{ just }} _build_vendored_readonly org.stardustxr.BlackHole
+    {{ just }} _build_vendored_readonly org.stardustxr.Comet
+    {{ just }} _build_vendored_readonly org.stardustxr.Flatland
+    {{ just }} _build_vendored_readonly org.stardustxr.Gravity
+    {{ just }} _build_vendored_readonly org.stardustxr.NonSpatialInput
+    {{ just }} _build_vendored_readonly org.stardustxr.Protostar
+    {{ just }} _build_vendored_readonly org.stardustxr.SolarSailer
+    {{ just }} _build_vendored_readonly org.stardustxr.Server {{ server_cargo_flags }}
+    {{ just }} _build_vendored_readonly org.stardustxr.WaylandService
+    {{ just }} _build_vendored_readonly org.stardustxr.PalmLauncher
+
+install_read_only_deps: build_read_only_deps
+    {{ just }} rootdir="{{ rootdir }}" prefix="{{ prefix }}" org.stardustxr.Atmosphere/install
+    {{ just }} rootdir="{{ rootdir }}" prefix="{{ prefix }}" org.stardustxr.Armillary/install
+    {{ just }} rootdir="{{ rootdir }}" prefix="{{ prefix }}" org.stardustxr.BlackHole/install
+    {{ just }} rootdir="{{ rootdir }}" prefix="{{ prefix }}" org.stardustxr.Comet/install
+    {{ just }} rootdir="{{ rootdir }}" prefix="{{ prefix }}" org.stardustxr.Flatland/install
+    {{ just }} rootdir="{{ rootdir }}" prefix="{{ prefix }}" org.stardustxr.Gravity/install
+    {{ just }} rootdir="{{ rootdir }}" prefix="{{ prefix }}" org.stardustxr.NonSpatialInput/install
+    {{ just }} rootdir="{{ rootdir }}" prefix="{{ prefix }}" org.stardustxr.Protostar/install
+    {{ just }} rootdir="{{ rootdir }}" prefix="{{ prefix }}" org.stardustxr.SolarSailer/install
+    {{ just }} rootdir="{{ rootdir }}" prefix="{{ prefix }}" org.stardustxr.Server/install
+    {{ just }} rootdir="{{ rootdir }}" prefix="{{ prefix }}" org.stardustxr.WaylandService/install
+    {{ just }} rootdir="{{ rootdir }}" prefix="{{ prefix }}" org.stardustxr.PalmLauncher/install
+
+_build_vendored_readonly target *args:
+    #!/usr/bin/env sh
+    cd {{ target }}
+    {{ just }} vendor
+    rm -rf vendor
+    tar pxf vendor.tar
+    chmod -R a-w vendor
+    {{ just }} build-release '--frozen --offline' {{ args }}
+
+appdir-telescope: build_read_only_deps
     mkdir -p "{{ telescope_appdir }}"
 
     # Install all the stardust components
-    {{ just }} rootdir="{{ telescope_appdir }}" prefix="/usr" install
+    {{ just }} rootdir="{{ telescope_appdir }}" prefix="/usr" install_read_only_deps
 
     # xwayland-satellite
     if ! test -f "{{ telescope_appdir }}/usr/bin/xwayland-satellite"; then \

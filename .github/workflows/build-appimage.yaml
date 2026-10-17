@@ -26,7 +26,7 @@ jobs:
           - arch: aarch64
             runner: ubuntu-24.04-arm
           - openxr_build: static
-            server_flags: "-F bevy_mod_openxr/openxr_static"
+            server_flags: "-F openxr_static"
             bin_suffix: "-static_openxr"
           - openxr_build: dynamic
             server_flags: ""

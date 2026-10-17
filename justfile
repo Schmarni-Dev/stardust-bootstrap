@@ -19,13 +19,7 @@ build:
     {{ just }} org.stardustxr.WaylandService/build-release
     {{ just }} org.stardustxr.PalmLauncher/build-release
 
-install_read_only_deps: build_read_only_deps
-	{{ just }} rootdir="{{ rootdir }}" prefix="{{ prefix }}" _install_inner
-
-install: build
-	{{ just }} rootdir="{{ rootdir }}" prefix="{{ prefix }}" _install_inner
-
-_install_inner:
+install:
     {{ just }} rootdir="{{ rootdir }}" prefix="{{ prefix }}" org.stardustxr.Atmosphere/install
     {{ just }} rootdir="{{ rootdir }}" prefix="{{ prefix }}" org.stardustxr.Armillary/install
     {{ just }} rootdir="{{ rootdir }}" prefix="{{ prefix }}" org.stardustxr.BlackHole/install
@@ -83,7 +77,7 @@ appdir-telescope: build_read_only_deps
     mkdir -p "{{ telescope_appdir }}"
 
     # Install all the stardust components
-    {{ just }} rootdir="{{ telescope_appdir }}" prefix="/usr" install_read_only_deps
+    {{ just }} rootdir="{{ telescope_appdir }}" prefix="/usr" install
 
     # xwayland-satellite
     if ! test -f "{{ telescope_appdir }}/usr/bin/xwayland-satellite"; then \
@@ -105,7 +99,7 @@ test-telescope *args: appdir-telescope
 update:
     git submodule foreach 'git checkout "$(git -C "$toplevel" config -f .gitmodules --get submodule."$name".branch || echo main)" && git pull'
 
-prefix-install:
+prefix-install: build
     {{ just }} rootdir="{{ justfile_directory() / 'prefix' }}" install
     [ -e "{{ justfile_directory() }}/startup.sh" ] || install -Dm755 "telescope/scripts/telescope_startup" "{{ justfile_directory() }}/startup.sh"
 

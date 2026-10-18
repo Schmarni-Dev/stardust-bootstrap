@@ -1,6 +1,7 @@
 just := just_executable()
 rootdir := ''
 server_cargo_flags := ''
+server_env_vars := ''
 prefix := '/usr'
 telescope_appdir := justfile_directory() / "Telescope.AppDir"
 prefix_dir := justfile_directory() / 'prefix' / 'usr'
@@ -57,7 +58,7 @@ build_read_only_deps:
     {{ just }} _build_vendored_readonly org.stardustxr.NonSpatialInput
     {{ just }} _build_vendored_readonly org.stardustxr.Protostar
     {{ just }} _build_vendored_readonly org.stardustxr.SolarSailer
-    {{ just }} _build_vendored_readonly org.stardustxr.Server {{ server_cargo_flags }}
+    {{ server_env_vars }} {{ just }} _build_vendored_readonly org.stardustxr.Server {{ server_cargo_flags }}
     {{ just }} _build_vendored_readonly org.stardustxr.WaylandService
     {{ just }} _build_vendored_readonly org.stardustxr.PalmLauncher
 

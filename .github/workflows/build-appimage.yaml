@@ -28,9 +28,13 @@ jobs:
           - openxr_build: static
             server_flags: "-F openxr_static"
             bin_suffix: "-static_openxr"
+            # sccache seems to cause openxr to not statically link but instead still build the dyn loading one?
+            server_env_vars: "SCCACHE_GHA_ENABLED=\"false\" RUSTC_WRAPPER=\"\""
           - openxr_build: dynamic
-            server_flags: ""
-            bin_suffix: ""
+          # the mimalloc feature causes segfaults in the static build on x86_64
+          - arch: x86_64
+            openxr_build: static
+            server_flags: "--no-default-features -F openxr_static"
           
     runs-on: ${{matrix.runner}}
 

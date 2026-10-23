@@ -2,7 +2,7 @@ name: Build AppImage
 
 on:
   push:
-    branches: [main]
+    branches: [main, hexagon_launcher_testing]
   pull_request:
     branches: [main]
   release:

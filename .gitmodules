@@ -24,7 +24,8 @@
 	url = https://github.com/StardustXR/non-spatial-input
 [submodule "org.stardustxr.Protostar"]
 	path = org.stardustxr.Protostar
-	url = https://github.com/StardustXR/protostar
+	url = https://github.com/Schmarni-Dev/protostar
+	branch = ci_test_bs_stuff
 [submodule "org.stardustxr.SolarSailer"]
 	path = org.stardustxr.SolarSailer
 	url = https://github.com/StardustXR/solar-sailer

@@ -56,11 +56,11 @@ build_read_only_deps:
     {{ just }} _build_vendored_readonly org.stardustxr.Flatland
     {{ just }} _build_vendored_readonly org.stardustxr.Gravity
     {{ just }} _build_vendored_readonly org.stardustxr.NonSpatialInput
-    {{ just }} _build_vendored_readonly org.stardustxr.Protostar
+    {{ just }} _build_vendored_readonly org.stardustxr.Protostar --no-default-features
     {{ just }} _build_vendored_readonly org.stardustxr.SolarSailer
     {{ server_env_vars }} {{ just }} _build_vendored_readonly org.stardustxr.Server {{ server_cargo_flags }}
     {{ just }} _build_vendored_readonly org.stardustxr.WaylandService
-    {{ just }} _build_vendored_readonly org.stardustxr.PalmLauncher
+    {{ just }} _build_vendored_readonly org.stardustxr.PalmLauncher --no-default-features
 
 _build_vendored_readonly target *args:
     #!/usr/bin/env sh

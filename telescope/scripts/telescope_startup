@@ -13,4 +13,4 @@ sleep 0.5 && xwayland-satellite $DISPLAY &
 gravity -- 0 0.0 -0.5 hexagon_launcher &
 black-hole &
 
-WAYLAND_DISPLAY=$FLAT_WAYLAND_DISPLAY manifold | simular &
+eclipse | simular &
